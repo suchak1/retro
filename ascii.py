@@ -27,7 +27,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--input", type=str, help="input filename")
 parser.add_argument("-o", "--output", type=str, help="output filename")
 parser.add_argument("-s", "--scale", type=int, help="ascii output size")
-parser.add_argument("-a", "--ascii", type=bool, help="ascii char use")
+parser.add_argument("-a", "--ascii", type=int, help="ascii char use")
+
 
 
 args = parser.parse_args()
@@ -39,11 +40,9 @@ if args.input == None or not os.path.isfile(args.input):
 ifile = args.input
 ofile = args.output
 scale = args.scale if args.scale else 45
+ascii = " .'`,^:\";~-_+<>i!lI?/\|()1{}[]rcvunxzjftLCJUYXZO0Qoahkbdpqwm*WMB8&%$#@" if args.ascii and args.ascii > 0 else " ░▒▓█"
 
-ascii=" ░▒▓█"
 
-if args.ascii:
-	ascii = " .'`,^:\";~-_+<>i!lI?/\|()1{}[]rcvunxzjftLCJUYXZO0Qoahkbdpqwm*WMB8&%$#@"	
 
 #ascii = ascii[::-1]
 
@@ -70,21 +69,35 @@ print(numAscii)
 j = 0
 
 while j < height:
-	line = ""
+	line1 = ""
+	line2 = ""
 	i = 0
 	while i < width-awidth:
 		#print(i, j)
 		#print(pix[i, j])
 		#grayscale = [round(sum(pix[k][j][0:3]) / (255*3) * (len(ascii) - 1)) for k in range(i, i+awidth)]
+		
 		grayscale = [round(sum(raw[k,j][0:3]) / (255*3) * (len(ascii) - 1)) for k in range(i, i+awidth)]
-
 		char = max(set(grayscale), key = grayscale.count)
+		line1 += ascii[char]*(1+round(width/height))
 
+		char = round(sum(raw[i, j][0:3]) / (255*3) * (len(ascii)-1))
+		line2 += ascii[char]*(1+round(width/height))
 
-		#char = round(sum(pix[i][j][0:3]) / (255*3) * (len(ascii)-1))
-		line += ascii[char]*(1+round(width/height))
+		
+
 		i += awidth
-	print(line)
+	if j == 0:
+			
+			new = " "*len(line1)
+			new = new[:(len(new)-1)//2-1] + "NEW" + new[(len(new)-1)//2+2:]
+			old = " "*len(line2)
+			old = old[:(len(old)-1)//2-1] + "OLD" + old[(len(old)-1)//2+2:]
+
+			print(new + " | " + old)
+			print("_"*len(line1) + "   " + "_"*len(line2))
+			print("")
+	print(line1 + " | " + line2)
 	j += aheight
 
 # while j < height:
