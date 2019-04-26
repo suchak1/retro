@@ -1,4 +1,4 @@
-# lofi_+__vid2ascii_
+# retro
 
 ## Application to convert videos to ASCII text.
 
