@@ -8,10 +8,13 @@ alphabetic char            |  special char
 :-------------------------:|:-------------------------:
 ![](test.png)              |  ![](test2.png)
 
+### Cleaning image using better pixel brightness polling algorithm (left)
+
+![](test3.png)
 
 ### TODO:
-- read in terminal size and use
 - preprocess frames / autocontrast 
+- read in terminal size and use
 - video to images
 - gui
 - website
