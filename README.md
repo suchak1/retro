@@ -1,4 +1,4 @@
-# vid2ascii
+# lofi_+__vid2ascii_
 
 ## Application to convert videos to ASCII text.
 
@@ -11,8 +11,7 @@ alphabetic char            |  special char
 
 ### TODO:
 - read in terminal size and use
-- 2d array of pixels
-- formalize functions
+- preprocess frames / autocontrast 
 - video to images
 - gui
 - website
