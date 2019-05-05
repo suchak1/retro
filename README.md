@@ -6,14 +6,22 @@
 
 alphabetic char            |  special char
 :-------------------------:|:-------------------------:
-![](test.png)              |  ![](test2.png)
+![](samples/alpha.png)              |  ![](samples/special.png)
 
 ### Cleaning image using better pixel brightness polling algorithm (left)
 
-![](test3.png)
+![](samples/polling.png)
+
+
+### Sharpening image beforehand using autocontrast algorithm (left)
+
+![](samples/autocontrast.PNG)
 
 ### TODO:
-- preprocess frames / autocontrast 
+- ~~picture to ascii~~
+- ~~convert pixel area to char~~
+- ~~preprocess frames / autocontrast~~
+- multiprocessing
 - read in terminal size and use
 - video to images
 - gui
