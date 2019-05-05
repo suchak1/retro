@@ -20,6 +20,8 @@ alphabetic char            |  special char
 ### TODO:
 - ~~picture to ascii~~
 - ~~convert pixel area to char~~
+- ~~functions~~
+- ~~command line arguments~~
 - ~~preprocess frames / autocontrast~~
 - multiprocessing
 - read in terminal size and use
