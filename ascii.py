@@ -119,13 +119,25 @@ while j < height:
 # 	for j, y in enumerate(x):
 # 		if i < 500 and j < 500:
 # 			y[0] += 100
+for i in range(width):
+	for j in range(height):
+		tup = raw[i, j]
+		if sum(tup[0:3]) < 255*3/2:
+			contrast = list(tup[0:3])
+			contrast = [round(i-255/(255/2 - i)) if round(i-255/(255/2 - i)) > 0 else 0 for i in tup[0:3]]
+		else:
+			contrast = list(tup[0:3])
+			contrast = [round(i+255/(i - 255/2)) if round(i+255/(i - 255/2)) < 256 else 255 for i in tup[0:3]]
+		contrast.extend(tup[3:])
+		raw[i, j] = tuple(contrast)
+
 
 
 
 
 
 #raw = pix2image(pix)
-#im.save("krish3.jpg")
+im.save("krish3.jpg")
 
 # for i in range(width):
 # 	for j in range(height):
@@ -136,9 +148,9 @@ while j < height:
 #note: i is column, j is row
 
 # fix:
+# multiprocessing
+# autocontrast
 # read in terminal size and use
-# 2d array pix
-# functions
 # video to images
 # gui
 # website
