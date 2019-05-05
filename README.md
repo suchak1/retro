@@ -24,7 +24,8 @@ alphabetic char            |  special char
 - ~~command line arguments~~
 - ~~preprocess frames / autocontrast~~
 - multiprocessing
-- read in terminal size and use
+- autoloading terminal size in scale var
 - video to images
-- gui
+- color option
+- gui - tkinter
 - website
