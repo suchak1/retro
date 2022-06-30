@@ -16,7 +16,6 @@ def image2pix(image):
 def pix2image(pix):
     for j in range(height):
         for i in range(width):
-            # (pixNew[i][j][0], pixNew[i][j][1], pixNew[i][j][2])
             raw[i, j] = tuple(pix[i][j])
 
 
@@ -40,27 +39,16 @@ scale = args.scale if args.scale else 45
 ascii = " .'`,^:\";~-_+<>i!lI?/\|()1{}[]rcvunxzjftLCJUYXZO0Qoahkbdpqwm*WMB8&%$#@" if args.ascii and args.ascii > 0 else " ░▒▓█"
 
 
-#ascii = ascii[::-1]
-
-
 im = Image.open(ifile)
 raw = im.load()
 print(im.size)
 width, height = im.size[0], im.size[1]
-#scale = max(width, height) // 14
-#scale = 45
 awidth = width // scale
 aheight = height // scale
-#print(pix[0, 1079])
 print(" ░▒▓█")
 
 
-#ascii = ascii[::-1]
-
 numAscii = len(ascii)
-print(numAscii)
-# print(pix)
-#pix = image2pix(im)
 
 j = 0
 
@@ -69,10 +57,6 @@ while j < height:
     line2 = ""
     i = 0
     while i < width-awidth:
-        #print(i, j)
-        #print(pix[i, j])
-        #grayscale = [round(sum(pix[k][j][0:3]) / (255*3) * (len(ascii) - 1)) for k in range(i, i+awidth)]
-
         grayscale = [round(sum(raw[k, j][0:3]) / (255*3) *
                            (len(ascii) - 1)) for k in range(i, i+awidth)]
         char = max(set(grayscale), key=grayscale.count)
@@ -95,79 +79,8 @@ while j < height:
     print(line1 + " | " + line2)
     j += aheight
 
-# while j < height:
-# 	line = ""
-# 	i = 0
-# 	while i < width:
-# 		#print(i, j)
-# 		#print(pix[i, j])
-# 		char = round(sum(raw[i, j][0:3]) / (255*3) * (len(ascii)-1))
-# 		line += ascii[char]*(1+round(width/height))
-# 		i += awidth
-# 	print(line)
-# 	j += aheight
 
-
-# for i, x in enumerate(pix):
-# 	for j, y in enumerate(x):
-# 		if i < 500 and j < 500:
-# 			y[0] += 100
-for i in range(width):
-    for j in range(height):
-        tup = raw[i, j]
-        if sum(tup[0:3]) < 255*3/2:
-            contrast = list(tup[0:3])
-            contrast = [round(i-255/(255/2 - i)) if round(i -
-                                                          255/(255/2 - i)) > 0 else 0 for i in tup[0:3]]
-        else:
-            contrast = list(tup[0:3])
-            contrast = [round(i+255/(i - 255/2)) if round(i +
-                                                          255/(i - 255/2)) < 256 else 255 for i in tup[0:3]]
-        contrast.extend(tup[3:])
-        raw[i, j] = tuple(contrast)
-
-j = 0
-
-while j < height:
-    line1 = ""
-    line2 = ""
-    i = 0
-    while i < width-awidth:
-        #print(i, j)
-        #print(pix[i, j])
-        #grayscale = [round(sum(pix[k][j][0:3]) / (255*3) * (len(ascii) - 1)) for k in range(i, i+awidth)]
-
-        grayscale = [round(sum(raw[k, j][0:3]) / (255*3) *
-                           (len(ascii) - 1)) for k in range(i, i+awidth)]
-        char = max(set(grayscale), key=grayscale.count)
-        line1 += ascii[char]*(1+round(width/height))
-
-        char = round(sum(raw[i, j][0:3]) / (255*3) * (len(ascii)-1))
-        line2 += ascii[char]*(1+round(width/height))
-
-        i += awidth
-    if j == 0:
-
-        new = " "*len(line1)
-        new = new[:(len(new)-1)//2-1] + "NEW" + new[(len(new)-1)//2+2:]
-        old = " "*len(line2)
-        old = old[:(len(old)-1)//2-1] + "OLD" + old[(len(old)-1)//2+2:]
-
-        print(new + " | " + old)
-        print("_"*len(line1) + "   " + "_"*len(line2))
-        print("")
-    print(line1 + " | " + line2)
-    j += aheight
-#raw = pix2image(pix)
-im.save("test.jpg")
-
-# for i in range(width):
-# 	for j in range(height):
-# 		if i < 500:
-# 			pix[i,j] = (pix[i, j][0]+10+j, pix[i, j][1]+10+j, pix[i, j][2]+10+j)
-# im.save("krish2.jpg")
-
-# note: i is column, j is row
+# im.save("test.jpg")
 
 # fix:
 # multiprocessing
