@@ -5,21 +5,19 @@ import argparse
 import os
 
 
-
 def image2pix(image):
-	raw = image.load()
-	width, height = image.size[0], image.size[1]
+    raw = image.load()
+    width, height = image.size[0], image.size[1]
 
-	pix = [[list(raw[i, j]) for j in range(height)] for i in range(width)]
-	return pix
-
+    pix = [[list(raw[i, j]) for j in range(height)] for i in range(width)]
+    return pix
 
 
 def pix2image(pix):
-	for j in range(height):
-		for i in range(width):
-			raw[i, j] = tuple(pix[i][j])#(pixNew[i][j][0], pixNew[i][j][1], pixNew[i][j][2])
-
+    for j in range(height):
+        for i in range(width):
+            # (pixNew[i][j][0], pixNew[i][j][1], pixNew[i][j][2])
+            raw[i, j] = tuple(pix[i][j])
 
 
 parser = argparse.ArgumentParser()
@@ -30,18 +28,16 @@ parser.add_argument("-s", "--scale", type=int, help="ascii output size")
 parser.add_argument("-a", "--ascii", type=int, help="ascii char use")
 
 
-
 args = parser.parse_args()
 
 if args.input == None or not os.path.isfile(args.input):
-	print("Please specify valid input file. Ex: $ python3 ascii.py -i filename.png")
-	quit()
+    print("Please specify valid input file. Ex: $ python3 ascii.py -i filename.png")
+    quit()
 
 ifile = args.input
 ofile = args.output
 scale = args.scale if args.scale else 45
 ascii = " .'`,^:\";~-_+<>i!lI?/\|()1{}[]rcvunxzjftLCJUYXZO0Qoahkbdpqwm*WMB8&%$#@" if args.ascii and args.ascii > 0 else " ░▒▓█"
-
 
 
 #ascii = ascii[::-1]
@@ -63,42 +59,41 @@ print(" ░▒▓█")
 
 numAscii = len(ascii)
 print(numAscii)
-#print(pix)
+# print(pix)
 #pix = image2pix(im)
 
 j = 0
 
 while j < height:
-	line1 = ""
-	line2 = ""
-	i = 0
-	while i < width-awidth:
-		#print(i, j)
-		#print(pix[i, j])
-		#grayscale = [round(sum(pix[k][j][0:3]) / (255*3) * (len(ascii) - 1)) for k in range(i, i+awidth)]
-		
-		grayscale = [round(sum(raw[k,j][0:3]) / (255*3) * (len(ascii) - 1)) for k in range(i, i+awidth)]
-		char = max(set(grayscale), key = grayscale.count)
-		line1 += ascii[char]*(1+round(width/height))
+    line1 = ""
+    line2 = ""
+    i = 0
+    while i < width-awidth:
+        #print(i, j)
+        #print(pix[i, j])
+        #grayscale = [round(sum(pix[k][j][0:3]) / (255*3) * (len(ascii) - 1)) for k in range(i, i+awidth)]
 
-		char = round(sum(raw[i, j][0:3]) / (255*3) * (len(ascii)-1))
-		line2 += ascii[char]*(1+round(width/height))
+        grayscale = [round(sum(raw[k, j][0:3]) / (255*3) *
+                           (len(ascii) - 1)) for k in range(i, i+awidth)]
+        char = max(set(grayscale), key=grayscale.count)
+        line1 += ascii[char]*(1+round(width/height))
 
-		
+        char = round(sum(raw[i, j][0:3]) / (255*3) * (len(ascii)-1))
+        line2 += ascii[char]*(1+round(width/height))
 
-		i += awidth
-	if j == 0:
-			
-			new = " "*len(line1)
-			new = new[:(len(new)-1)//2-1] + "NEW" + new[(len(new)-1)//2+2:]
-			old = " "*len(line2)
-			old = old[:(len(old)-1)//2-1] + "OLD" + old[(len(old)-1)//2+2:]
+        i += awidth
+    if j == 0:
 
-			print(new + " | " + old)
-			print("_"*len(line1) + "   " + "_"*len(line2))
-			print("")
-	print(line1 + " | " + line2)
-	j += aheight
+        new = " "*len(line1)
+        new = new[:(len(new)-1)//2-1] + "NEW" + new[(len(new)-1)//2+2:]
+        old = " "*len(line2)
+        old = old[:(len(old)-1)//2-1] + "OLD" + old[(len(old)-1)//2+2:]
+
+        print(new + " | " + old)
+        print("_"*len(line1) + "   " + "_"*len(line2))
+        print("")
+    print(line1 + " | " + line2)
+    j += aheight
 
 # while j < height:
 # 	line = ""
@@ -113,39 +108,66 @@ while j < height:
 # 	j += aheight
 
 
-
-
 # for i, x in enumerate(pix):
 # 	for j, y in enumerate(x):
 # 		if i < 500 and j < 500:
 # 			y[0] += 100
 for i in range(width):
-	for j in range(height):
-		tup = raw[i, j]
-		if sum(tup[0:3]) < 255*3/2:
-			contrast = list(tup[0:3])
-			contrast = [round(i-255/(255/2 - i)) if round(i-255/(255/2 - i)) > 0 else 0 for i in tup[0:3]]
-		else:
-			contrast = list(tup[0:3])
-			contrast = [round(i+255/(i - 255/2)) if round(i+255/(i - 255/2)) < 256 else 255 for i in tup[0:3]]
-		contrast.extend(tup[3:])
-		raw[i, j] = tuple(contrast)
+    for j in range(height):
+        tup = raw[i, j]
+        if sum(tup[0:3]) < 255*3/2:
+            contrast = list(tup[0:3])
+            contrast = [round(i-255/(255/2 - i)) if round(i -
+                                                          255/(255/2 - i)) > 0 else 0 for i in tup[0:3]]
+        else:
+            contrast = list(tup[0:3])
+            contrast = [round(i+255/(i - 255/2)) if round(i +
+                                                          255/(i - 255/2)) < 256 else 255 for i in tup[0:3]]
+        contrast.extend(tup[3:])
+        raw[i, j] = tuple(contrast)
 
+j = 0
 
+while j < height:
+    line1 = ""
+    line2 = ""
+    i = 0
+    while i < width-awidth:
+        #print(i, j)
+        #print(pix[i, j])
+        #grayscale = [round(sum(pix[k][j][0:3]) / (255*3) * (len(ascii) - 1)) for k in range(i, i+awidth)]
 
+        grayscale = [round(sum(raw[k, j][0:3]) / (255*3) *
+                           (len(ascii) - 1)) for k in range(i, i+awidth)]
+        char = max(set(grayscale), key=grayscale.count)
+        line1 += ascii[char]*(1+round(width/height))
 
+        char = round(sum(raw[i, j][0:3]) / (255*3) * (len(ascii)-1))
+        line2 += ascii[char]*(1+round(width/height))
 
+        i += awidth
+    if j == 0:
 
+        new = " "*len(line1)
+        new = new[:(len(new)-1)//2-1] + "NEW" + new[(len(new)-1)//2+2:]
+        old = " "*len(line2)
+        old = old[:(len(old)-1)//2-1] + "OLD" + old[(len(old)-1)//2+2:]
+
+        print(new + " | " + old)
+        print("_"*len(line1) + "   " + "_"*len(line2))
+        print("")
+    print(line1 + " | " + line2)
+    j += aheight
 #raw = pix2image(pix)
-im.save("krish3.jpg")
+im.save("test.jpg")
 
 # for i in range(width):
 # 	for j in range(height):
 # 		if i < 500:
 # 			pix[i,j] = (pix[i, j][0]+10+j, pix[i, j][1]+10+j, pix[i, j][2]+10+j)
-#im.save("krish2.jpg")
+# im.save("krish2.jpg")
 
-#note: i is column, j is row
+# note: i is column, j is row
 
 # fix:
 # multiprocessing
