@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 import math
 import sys
 import argparse
@@ -54,43 +54,46 @@ aheight = height // scale
 numAscii = len(ascii)
 
 j = 0
-
+lines = []
 while j < height:
-    line1 = ""
+    line = ""
     i = 0
     while i < width-awidth:
         grayscale = []
+        # reds = []
+        # greens = []
+        # blues = []
         for k in range(i, i + awidth):
             r, g, b = raw[k, j]
             lum = rgb2lum(r, g, b)
             grayscale.append(round(lum * (len(ascii) - 1)))
         char = max(set(grayscale), key=grayscale.count)
-        line1 += ascii[char]*(1 + round(width / height))
+        line += ascii[char] * (1 + round(width / height))
 
         i += awidth
 
-    print(line1)
+    print(line)
+    lines.append(line)
     j += aheight
 
-
-# j = 0
-
-# while j < height:
-#     line2 = ""
-#     i = 0
-#     while i < width-awidth:
-#         grayscale = [round(sum(raw[k, j][0:3]) / (255*3) *
-#                            (len(ascii) - 1)) for k in range(i, i+awidth)]
-#         char = round(sum(raw[i, j][0:3]) / (255*3) * (len(ascii)-1))
-#         line2 += ascii[char]*(1+round(width/height))
-
-#         i += awidth
-
-#     print(line2)
-#     j += aheight
-
-
-# im.save("test.jpg")
+im = Image.new(mode='RGB', size=(width, height))
+draw = ImageDraw.Draw(im)
+font_location = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+# font_location = '/usr/share/fonts/truetype/noto/NotoMono-Regular.ttf'
+# font-size: 1, scale: 800, 900
+# font size: 5, scale: 300
+# font size: 10, scale: 160
+# font-size: 15, scale: 110
+# font-size: 20, scale: 85
+# font-size: 30, scale: 60
+font = ImageFont.truetype(
+    font_location, 20)
+for idx, line in enumerate(lines):
+    draw.text((0, idx / len(lines) * height),
+              line, fill=(255, 255, 255), font=font)
+# draw.text((0, 100), "Hello, TutorialsPoint!", fill=(255, 0, 0), font=font)
+# im.show()
+im.save("test.jpg")
 
 # fix:
 # multiprocessing
