@@ -19,6 +19,11 @@ def pix2image(pix):
             raw[i, j] = tuple(pix[i][j])
 
 
+def rgb2lum(r, g, b):
+    # luminosity standardized on scale [0, 1]
+    return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255
+
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument("-i", "--input", type=str, help="input filename")
@@ -49,7 +54,6 @@ aheight = height // scale
 numAscii = len(ascii)
 
 j = 0
-print(raw[1500, 1500])
 
 while j < height:
     line1 = ""
@@ -57,13 +61,11 @@ while j < height:
     while i < width-awidth:
         grayscale = []
         for k in range(i, i + awidth):
-            luminosity = round(
-                sum(raw[k, j][0:3]) / (255*3) *
-                (len(ascii) - 1)
-            )
-            grayscale.append(luminosity)
+            r, g, b = raw[k, j]
+            lum = rgb2lum(r, g, b)
+            grayscale.append(round(lum * (len(ascii) - 1)))
         char = max(set(grayscale), key=grayscale.count)
-        line1 += ascii[char]*(1+round(width/height))
+        line1 += ascii[char]*(1 + round(width / height))
 
         i += awidth
 
