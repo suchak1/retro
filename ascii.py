@@ -57,8 +57,11 @@ while j < height:
     while i < width-awidth:
         grayscale = []
         for k in range(i, i + awidth):
-            grayscale.append(round(sum(raw[k, j][0:3]) / (255*3) *
-                                   (len(ascii) - 1)))
+            luminosity = round(
+                sum(raw[k, j][0:3]) / (255*3) *
+                (len(ascii) - 1)
+            )
+            grayscale.append(luminosity)
         char = max(set(grayscale), key=grayscale.count)
         line1 += ascii[char]*(1+round(width/height))
 
