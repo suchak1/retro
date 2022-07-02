@@ -82,18 +82,30 @@ font_location = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 # font_location = '/usr/share/fonts/truetype/noto/NotoMono-Regular.ttf'
 # font-size: 1, scale: 800, 900
 # font size: 5, scale: 300
-# font size: 10, scale: 160
-# font-size: 15, scale: 110
+# font size: 10, scale: 160 - this is good
+# font-size: 15, scale: 110 - this is good *
+#  python3 ascii.py -i im_dramatic.jpeg -s 110
 # font-size: 20, scale: 85
 # font-size: 30, scale: 60
-font = ImageFont.truetype(
-    font_location, 20)
+font_size = {800: 1, 900: 1, 300: 5, 160: 10, 110: 15, 85: 20, 60: 30}[scale]
+font = ImageFont.truetype(font_location, font_size)
+
+mid_msg = "I love you. ❤️"
+mid_idx = round(len(lines) / 2)
+line = lines[mid_idx]
+
+line = line[0: int(len(line) / 2 - len(mid_msg) / 2)] + \
+    mid_msg + line[int(len(line) / 2 + len(mid_msg) / 2):]
+lines[mid_idx] = line
+
+
 for idx, line in enumerate(lines):
     draw.text((0, idx / len(lines) * height),
               line, fill=(255, 255, 255), font=font)
 # draw.text((0, 100), "Hello, TutorialsPoint!", fill=(255, 0, 0), font=font)
 # im.show()
-im.save("test.jpg")
+filename = ifile.split('.')[0]
+im.save(f"mod_{filename}{'_a' if args.ascii else ''}.jpg")
 
 # fix:
 # multiprocessing
